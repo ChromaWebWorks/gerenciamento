@@ -1,0 +1,1397 @@
+<html><head><base href="https://bar-esperanca.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bar Esperança - Gerenciamento</title>
+<style>
+  :root {
+    --primary-color: #1c7c54;
+    --secondary-color: #f9a825;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+  }
+  
+  #statusIndicator {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  h1, h2 {
+    margin-bottom: 20px;
+  }
+  
+  section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  th {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+    margin: 2px;
+  }
+  
+  button:hover {
+    background-color: #145a3f;
+  }
+  
+  .remove {
+    background-color: #dc3545;
+  }
+  
+  .remove:hover {
+    background-color: #c82333;
+  }
+  
+  .edit {
+    background-color: var(--secondary-color);
+  }
+  
+  .edit:hover {
+    background-color: #e69c00;
+  }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form input, form select {
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+
+  #loginContainer {
+    max-width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  #loginContainer h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #loginContainer input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  #loginContainer button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  #loginContainer button:hover {
+    background-color: #145a3f;
+  }
+
+  #managementSystem {
+    display: none;
+  }
+
+  #logoutBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+
+  #logoutBtn:hover {
+    background-color: #e69c00;
+  }
+
+  .feedback-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  .feedback-item p {
+    margin: 5px 0;
+  }
+
+  #feedbackList {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  @media screen and (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr {
+      margin-bottom: 15px;
+    }
+    
+    td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+    }
+    
+    td:before {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      content: attr(data-label);
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 10px;
+    }
+
+    header {
+      padding: 10px 0;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    section {
+      padding: 15px;
+    }
+
+    button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    #queueControls {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #queueControls > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #queueControls input[type="time"] {
+      margin-bottom: 10px;
+    }
+
+    #mainNav ul {
+      flex-direction: column;
+    }
+
+    #mainNav li {
+      margin: 5px 0;
+    }
+
+    #logoutBtn {
+      position: static;
+      margin-top: 20px;
+    }
+  }
+
+  #loginModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+
+  #loginModal .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+  }
+
+  #loginModal input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+
+  #loginModal button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  #loginModal button:hover {
+    background-color: #145a3f;
+  }
+
+  #teamManagement {
+    margin-top: 30px;
+  }
+
+  #addTeamMemberForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  #addTeamMemberForm input,
+  #addTeamMemberForm select {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  #teamFilter,
+  #teamFilterValue {
+    margin-right: 10px;
+  }
+
+  #teamTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  #teamTable th,
+  #teamTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  #teamTable th {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  #mainNav {
+    background-color: var(--primary-color);
+    padding: 10px 0;
+  }
+
+  #mainNav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  #mainNav li {
+    margin: 0 10px;
+  }
+
+  #mainNav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+
+  #mainNav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+</style>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+<script>
+  function handleFirestoreError(error, fallbackAction) {
+    console.error("Firestore error:", error);
+    if (error.code === 'unavailable' || error.message.includes('offline')) {
+      console.log('Offline mode: Using cached data if available');
+      if (fallbackAction) {
+        fallbackAction();
+      }
+    } else {
+      console.error("Unexpected error:", error);
+    }
+  }
+
+  function updateOnlineStatus() {
+    const condition = navigator.onLine ? "online" : "offline";
+    console.log(`Connection status: ${condition}`);
+    const statusIndicator = document.getElementById('statusIndicator');
+    if (statusIndicator) {
+      statusIndicator.textContent = condition.toUpperCase();
+      statusIndicator.style.color = condition === 'online' ? 'green' : 'red';
+    }
+  }
+
+  function initializeApp() {
+    db.collection('settings').doc('queueStatus').get().then((doc) => {
+      if (doc.exists) {
+        queueActive = doc.data().active;
+        updateQueueActivationUI();
+      }
+    }).catch((error) => {
+      handleFirestoreError(error, () => {
+        const lastKnownStatus = localStorage.getItem('queueActive');
+        if (lastKnownStatus !== null) {
+          queueActive = JSON.parse(lastKnownStatus);
+          updateQueueActivationUI();
+        }
+      });
+    });
+
+    db.collection('settings').doc('queueStatus').onSnapshot((doc) => {
+      if (doc.exists) {
+        queueActive = doc.data().active;
+        updateQueueActivationUI();
+        const autoActivateTime = document.getElementById('autoActivateTime');
+        if (autoActivateTime) {
+          autoActivateTime.value = doc.data().autoActivateTime || '';
+        }
+      }
+    });
+
+    initializeQueuePositions();
+    updateReservations();
+    updateFeedbacks();
+    initializeTeamManagement();
+    showLogoutButton();
+    const mainContent = document.getElementById('mainContent');
+    const otherContent = document.getElementById('otherContent');
+    if (mainContent) mainContent.style.display = 'block';
+    if (otherContent) otherContent.style.display = 'none';
+    document.getElementById('activateQueueBtn').addEventListener('click', toggleQueue);
+    document.getElementById('setAutoActivateTime').addEventListener('click', setAutoActivateTime);
+  }
+
+  function toggleQueue() {
+    queueActive = !queueActive;
+    db.collection('settings').doc('queueStatus').update({ 
+      active: queueActive 
+    }).then(() => {
+      updateQueueActivationUI();
+      console.log(queueActive ? 'Queue activated' : 'Queue deactivated');
+      localStorage.setItem('queueActive', JSON.stringify(queueActive));
+    }).catch((error) => {
+      handleFirestoreError(error, () => {
+        queueActive = !queueActive;
+        updateQueueActivationUI();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const loginForm = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (loginForm) {
+      loginForm.onsubmit = (e) => {
+        e.preventDefault();
+        const username = usernameInput ? usernameInput.value : '';
+        const password = passwordInput ? passwordInput.value : '';
+        authenticate(username, password);
+      };
+    }
+
+    if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        isAuthenticated = false;
+        localStorage.removeItem('isAuthenticated');
+        showLoginContainer();
+      };
+    }
+
+    const isAuthenticatedStorage = localStorage.getItem('isAuthenticated');
+    if (isAuthenticatedStorage === 'true') {
+      isAuthenticated = true;
+      hideLoginContainer();
+      initializeApp();
+    } else {
+      showLoginContainer();
+    }
+
+    updateOnlineStatus();
+  });
+
+  window.addEventListener('online', () => {
+    updateOnlineStatus();
+    // Implement retry logic for failed operations
+  });
+  window.addEventListener('offline', updateOnlineStatus);
+</script>
+</head>
+<body>
+  <div id="loginContainer" style="display: none;">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <div id="managementSystem" style="display: none;">
+    <header>
+      <h1>Bar Esperança - Gerenciamento</h1>
+      <button id="logoutBtn" style="display: none;">Logout</button>
+    </header>
+    
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#" data-section="main">Principal</a></li>
+        <li><a href="#" data-section="addToQueue">Adicionar à Fila</a></li>
+        <li><a href="#" data-section="createReservation">Criar Reserva</a></li>
+        <li><a href="#" data-section="feedbacks">Feedbacks</a></li>
+        <li><a href="#" data-section="teamManagement">Gerenciar Equipe</a></li>
+      </ul>
+    </nav>
+
+    <main class="container">
+      <div id="mainContent">
+        <section id="statistics">
+          <h2>Estatísticas</h2>
+          <p>Clientes na fila: <span id="queueCount">0</span></p>
+          <p>Reservas do dia: <span id="todayReservations">0</span></p>
+        </section>
+        
+        <section id="queueManagement">
+          <h2>Gerenciamento da Fila</h2>
+          <table id="queueTable">
+            <thead>
+              <tr>
+                <th>Posição</th>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Tamanho do Grupo</th>
+                <th>Tempo de Espera</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section id="reservationManagement">
+          <h2>Gerenciamento de Reservas</h2>
+          <table id="reservationTable">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Data</th>
+                <th>Horário</th>
+                <th>Tamanho do Grupo</th>
+                <th>Área</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section id="queueControls">
+          <h2>Controle da Fila</h2>
+          <button id="activateQueueBtn">Ativar Fila</button>
+          <div>
+            <label for="autoActivateTime">Ativar automaticamente às:</label>
+            <input type="time" id="autoActivateTime">
+            <button id="setAutoActivateTime">Definir</button>
+          </div>
+        </section>
+      </div>
+
+      <div id="otherContent" style="display: none;">
+        <section id="addToQueue">
+          <h2>Adicionar à Fila</h2>
+          <form id="addToQueueForm">
+            <input type="text" id="queueName" placeholder="Nome" required>
+            <input type="tel" id="queuePhone" placeholder="Telefone" required>
+            <input type="number" id="queuePartySize" placeholder="Tamanho do Grupo" required>
+            <button type="submit">Adicionar à Fila</button>
+          </form>
+        </section>
+
+        <section id="createReservation">
+          <h2>Criar Reserva</h2>
+          <form id="createReservationForm">
+            <input type="text" id="reservationName" placeholder="Nome" required>
+            <input type="tel" id="reservationPhone" placeholder="Telefone" required>
+            <input type="number" id="reservationPartySize" placeholder="Tamanho do Grupo" required>
+            <input type="date" id="reservationDate" required>
+            <input type="time" id="reservationTime" required>
+            <select id="reservationArea" required>
+              <option value="terreo">Térreo</option>
+              <option value="primeiro_andar">Primeiro Andar</option>
+            </select>
+            <button type="submit">Criar Reserva</button>
+          </form>
+        </section>
+
+        <section id="feedbacks">
+          <h2>Feedbacks</h2>
+          <div id="feedbackList"></div>
+        </section>
+
+        <section id="teamManagement">
+          <h2>Gerenciar Equipe</h2>
+          <form id="addTeamMemberForm">
+            <input type="text" id="teamMemberName" placeholder="Nome" required>
+            <input type="text" id="teamMemberRole" placeholder="Função" required>
+            <select id="teamMemberShift" required>
+              <option value="">Selecione o turno</option>
+              <option value="manha">Manhã</option>
+              <option value="tarde">Tarde</option>
+              <option value="noite">Noite</option>
+            </select>
+            <input type="tel" id="teamMemberContact" placeholder="Contato" required>
+            <button type="submit">Adicionar Membro</button>
+          </form>
+          <div>
+            <label for="teamFilter">Filtrar por:</label>
+            <select id="teamFilter">
+              <option value="all">Todos</option>
+              <option value="role">Função</option>
+              <option value="shift">Turno</option>
+            </select>
+            <input type="text" id="teamFilterValue" placeholder="Valor do filtro">
+            <button id="applyTeamFilter">Aplicar Filtro</button>
+          </div>
+          <table id="teamTable">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Função</th>
+                <th>Turno</th>
+                <th>Contato</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Editar Informações</h2>
+      <form id="editForm">
+        <input type="hidden" id="editId">
+        <input type="hidden" id="editType">
+        <input type="text" id="editName" placeholder="Nome" required>
+        <input type="tel" id="editPhone" placeholder="Telefone">
+        <input type="number" id="editPartySize" placeholder="Tamanho do Grupo">
+        <input type="date" id="editDate">
+        <input type="time" id="editTime">
+        <select id="editArea">
+          <option value="terreo">Térreo</option>
+          <option value="primeiro_andar">Primeiro Andar</option>
+        </select>
+        <input type="text" id="editRole" placeholder="Função">
+        <select id="editShift">
+          <option value="manha">Manhã</option>
+          <option value="tarde">Tarde</option>
+          <option value="noite">Noite</option>
+        </select>
+        <input type="tel" id="editContact" placeholder="Contato">
+        <button type="submit">Salvar Alterações</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Configurações</h2>
+      <form id="settingsForm">
+        <label for="maxReservations">Número máximo de reservas por dia:</label>
+        <input type="number" id="maxReservations" required>
+        <label for="advanceReservationDays">Dias de antecedência para reservas:</label>
+        <input type="number" id="advanceReservationDays" required>
+        <button type="submit">Salvar</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyACMK8-XbLmdRAEVUx3prQO7HxFRjaeHP4",
+      authDomain: "baresperanca-cca31.firebaseapp.com",
+      projectId: "baresperanca-cca31",
+      storageBucket: "baresperanca-cca31.appspot.com",
+      messagingSenderId: "320253941927",
+      appId: "1:320253941927:web:6ec1be91f1342da3caa382",
+      measurementId: "G-YBVNRCFNNZ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+
+    firebase.firestore().enablePersistence()
+      .catch((err) => {
+        if (err.code == 'failed-precondition') {
+          console.log('Multiple tabs open, persistence can only be enabled in one tab at a a time.');
+        } else if (err.code == 'unimplemented') {
+          console.log('The current browser does not support all of the features required to enable persistence');
+        }
+      });
+    
+    const db = firebase.firestore();
+    
+    let queueActive = false;
+
+    function updateOnlineStatus() {
+      const condition = navigator.onLine ? "online" : "offline";
+      console.log(`Connection status: ${condition}`);
+      const statusIndicator = document.getElementById('statusIndicator');
+      if (statusIndicator) {
+        statusIndicator.textContent = condition.toUpperCase();
+        statusIndicator.style.color = condition === 'online' ? 'green' : 'red';
+      }
+    }
+
+    window.addEventListener('online', () => {
+      updateOnlineStatus();
+      // Implement retry logic for failed operations
+    });
+    window.addEventListener('offline', updateOnlineStatus);
+
+    function showLoginContainer() {
+      const loginContainer = document.getElementById('loginContainer');
+      const managementSystem = document.getElementById('managementSystem');
+      if (loginContainer && managementSystem) {
+        loginContainer.style.display = 'block';
+        managementSystem.style.display = 'none';
+      }
+    }
+
+    function hideLoginContainer() {
+      const loginContainer = document.getElementById('loginContainer');
+      const managementSystem = document.getElementById('managementSystem');
+      if (loginContainer && managementSystem) {
+        loginContainer.style.display = 'none';
+        managementSystem.style.display = 'block';
+      }
+    }
+
+    const modal = document.getElementById("editModal");
+    const span = document.getElementsByClassName("close")[0];
+    const editForm = document.getElementById("editForm");
+    let isAuthenticated = false;
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const loginForm = document.getElementById('loginForm');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      if (loginForm) {
+        loginForm.onsubmit = (e) => {
+          e.preventDefault();
+          const username = usernameInput ? usernameInput.value : '';
+          const password = passwordInput ? passwordInput.value : '';
+          authenticate(username, password);
+        };
+      }
+
+      if (logoutBtn) {
+        logoutBtn.onclick = () => {
+          isAuthenticated = false;
+          localStorage.removeItem('isAuthenticated');
+          showLoginContainer();
+        };
+      }
+
+      const isAuthenticatedStorage = localStorage.getItem('isAuthenticated');
+      if (isAuthenticatedStorage === 'true') {
+        isAuthenticated = true;
+        hideLoginContainer();
+        initializeApp();
+      } else {
+        showLoginContainer();
+      }
+
+      updateOnlineStatus();
+    });
+
+    function authenticate(username, password) {
+      if (username === 'admin' && password === '1921684815') {
+        isAuthenticated = true;
+        localStorage.setItem('isAuthenticated', 'true');
+        hideLoginContainer();
+        initializeApp();
+      } else {
+        alert('Invalid credentials');
+      }
+    }
+
+    span.onclick = () => modal.style.display = "none";
+    window.onclick = (event) => {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    function initializeApp() {
+      db.collection('settings').doc('queueStatus').get().then((doc) => {
+        if (doc.exists) {
+          queueActive = doc.data().active;
+          updateQueueActivationUI();
+        }
+      }).catch((error) => {
+        handleFirestoreError(error, () => {
+          const lastKnownStatus = localStorage.getItem('queueActive');
+          if (lastKnownStatus !== null) {
+            queueActive = JSON.parse(lastKnownStatus);
+            updateQueueActivationUI();
+          }
+        });
+      });
+
+      db.collection('settings').doc('queueStatus').onSnapshot((doc) => {
+        if (doc.exists) {
+          queueActive = doc.data().active;
+          updateQueueActivationUI();
+          const autoActivateTime = document.getElementById('autoActivateTime');
+          if (autoActivateTime) {
+            autoActivateTime.value = doc.data().autoActivateTime || '';
+          }
+        }
+      });
+
+      initializeQueuePositions();
+      updateReservations();
+      updateFeedbacks();
+      initializeTeamManagement();
+      showLogoutButton();
+
+      const mainContent = document.getElementById('mainContent');
+      const otherContent = document.getElementById('otherContent');
+      if (mainContent) mainContent.style.display = 'block';
+      if (otherContent) otherContent.style.display = 'none';
+
+      document.getElementById('activateQueueBtn').addEventListener('click', toggleQueue);
+      document.getElementById('setAutoActivateTime').addEventListener('click', setAutoActivateTime);
+    }
+
+    function toggleQueue() {
+      queueActive = !queueActive;
+      db.collection('settings').doc('queueStatus').update({ 
+        active: queueActive 
+      }).then(() => {
+        updateQueueActivationUI();
+        console.log(queueActive ? 'Queue activated' : 'Queue deactivated');
+        localStorage.setItem('queueActive', JSON.stringify(queueActive));
+      }).catch((error) => {
+        handleFirestoreError(error, () => {
+          queueActive = !queueActive;
+          updateQueueActivationUI();
+        });
+      });
+    }
+
+    function updateQueueActivationUI() {
+      const activateQueueBtn = document.getElementById('activateQueueBtn');
+      if (activateQueueBtn) {
+        activateQueueBtn.textContent = queueActive ? 'Desativar Fila' : 'Ativar Fila';
+      }
+    }
+
+    function setAutoActivateTime() {
+      const time = document.getElementById('autoActivateTime').value;
+      db.collection('settings').doc('queueStatus').update({ 
+        autoActivateTime: time 
+      }).then(() => {
+        console.log('Auto-activate time set to:', time);
+      });
+    }
+
+    function showLogoutButton() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.style.display = 'block';
+      }
+    }
+
+    function notifyCustomer(docId, phone) {
+      db.collection('queue').doc(docId).get().then((doc) => {
+        if (doc.exists) {
+          return db.collection('queue').doc(docId).update({
+            position: 0,
+            status: 'turn_arrived'
+          });
+        }
+      }).then(() => {
+        console.log(`Customer notified: ${phone}`);
+        alert(`Cliente notificado: ${phone}. Deve comparecer em até 3 minutos.`);
+        updateQueuePositions();
+      }).catch((error) => {
+        handleFirestoreError(error);
+      });
+    }
+
+    function removeFromQueue(docId) {
+      db.collection('queue').doc(docId).update({
+        status: 'removed'
+      }).then(() => {
+        console.log("Customer removed from queue");
+        updateQueuePositions();
+      }).catch((error) => {
+        handleFirestoreError(error);
+      });
+    }
+
+    function updateQueue() {
+      const queueTable = document.querySelector('#queueTable tbody');
+      queueTable.innerHTML = '';
+
+      db.collection('queue').orderBy('position').onSnapshot((snapshot) => {
+        let count = 0;
+        queueTable.innerHTML = '';
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.status !== 'removed' && data.status !== 'turn_arrived') {
+            count++;
+            const waitTime = Math.floor((Date.now() - data.timestamp) / 60000);
+            const position = data.position === 0 ? 'Sua vez' : data.position;
+            const row = `
+              <tr>
+                <td data-label="Posição">${position}</td>
+                <td data-label="Nome">${data.name}</td>
+                <td data-label="Telefone">${data.phone}</td>
+                <td data-label="Tamanho do Grupo">${data.partySize}</td>
+                <td data-label="Tempo de Espera">${waitTime} minutos</td>
+                <td data-label="Status">
+                  ${data.position === 0 ? 'Aguardando comparecimento' : 'Na fila'}
+                </td>
+                <td data-label="Ações">
+                  <button onclick="editQueueItem('${doc.id}')">Editar</button>
+                  <button onclick="notifyCustomer('${doc.id}', '${data.phone}')">Notificar</button>
+                  <button class="remove" onclick="removeFromQueue('${doc.id}')">Remover</button>
+                </td>
+              </tr>
+            `;
+            queueTable.insertAdjacentHTML('beforeend', row);
+          }
+        });
+        document.getElementById('queueCount').textContent = count;
+      }, (error) => {
+        handleFirestoreError(error);
+      });
+    }
+
+    function initializeQueuePositions() {
+      db.collection('queue').orderBy('timestamp').get().then((snapshot) => {
+        let position = 1;
+        const batch = db.batch();
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.status !== 'removed' && data.status !== 'turn_arrived') {
+            batch.update(doc.ref, { position: position });
+            position++;
+          }
+        });
+        return batch.commit();
+      }).then(() => {
+        console.log("Queue positions initialized successfully");
+        updateQueue();
+      }).catch((error) => {
+        handleFirestoreError(error);
+      });
+    }
+
+    function updateReservations() {
+      const reservationTable = document.querySelector('#reservationTable tbody');
+      reservationTable.innerHTML = '';
+
+      const today = new Date().toISOString().split('T')[0];
+      let todayCount = 0;
+
+      db.collection('reservations').orderBy('date').onSnapshot((snapshot) => {
+        reservationTable.innerHTML = '';
+        todayCount = 0;
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.date === today) {
+            todayCount++;
+          }
+          const row = `
+            <tr>
+              <td data-label="Nome">${data.name}</td>
+              <td data-label="Telefone">${data.phone}</td>
+              <td data-label="Data">${data.date}</td>
+              <td data-label="Horário">${data.time}</td>
+              <td data-label="Tamanho do Grupo">${data.partySize}</td>
+              <td data-label="Área">${data.area === 'terreo' ? 'Térreo' : 'Primeiro Andar'}</td>
+              <td data-label="Ações">
+                <button onclick="editReservation('${doc.id}')">Editar</button>
+                <button class="remove" onclick="removeReservation('${doc.id}')">Cancelar</button>
+              </td>
+            </tr>
+          `;
+          reservationTable.insertAdjacentHTML('beforeend', row);
+        });
+        document.getElementById('todayReservations').textContent = todayCount;
+      });
+    }
+
+    function removeReservation(docId) {
+      db.collection('reservations').doc(docId).delete().then(() => {
+        console.log("Reservation successfully canceled!");
+      }).catch((error) => {
+        handleFirestoreError(error);
+      });
+    }
+
+    function editQueueItem(docId) {
+      db.collection('queue').doc(docId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('editId').value = docId;
+          document.getElementById('editType').value = 'queue';
+          document.getElementById('editName').value = data.name;
+          document.getElementById('editPhone').value = data.phone;
+          document.getElementById('editPartySize').value = data.partySize;
+          document.getElementById('editDate').style.display = 'none';
+          document.getElementById('editTime').style.display = 'none';
+          document.getElementById('editArea').style.display = 'none';
+          document.getElementById('editRole').style.display = 'none';
+          document.getElementById('editShift').style.display = 'none';
+          document.getElementById('editContact').style.display = 'none';
+          modal.style.display = "block";
+        }
+      });
+    }
+
+    function editReservation(docId) {
+      db.collection('reservations').doc(docId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('editId').value = docId;
+          document.getElementById('editType').value = 'reservation';
+          document.getElementById('editName').value = data.name;
+          document.getElementById('editPhone').value = data.phone;
+          document.getElementById('editPartySize').value = data.partySize;
+          document.getElementById('editDate').value = data.date;
+          document.getElementById('editTime').value = data.time;
+          document.getElementById('editArea').value = data.area;
+          
+          document.getElementById('editName').style.display = 'block';
+          document.getElementById('editPhone').style.display = 'block';
+          document.getElementById('editPartySize').style.display = 'block';
+          document.getElementById('editDate').style.display = 'block';
+          document.getElementById('editTime').style.display = 'block';
+          document.getElementById('editArea').style.display = 'block';
+          document.getElementById('editRole').style.display = 'none';
+          document.getElementById('editShift').style.display = 'none';
+          document.getElementById('editContact').style.display = 'none';
+          
+          modal.style.display = "block";
+        }
+      });
+    }
+
+    editForm.onsubmit = (e) => {
+      e.preventDefault();
+      const docId = document.getElementById('editId').value;
+      const type = document.getElementById('editType').value;
+      const name = document.getElementById('editName').value;
+      const phone = document.getElementById('editPhone').value;
+      const partySize = parseInt(document.getElementById('editPartySize').value);
+
+      if (type === 'reservation') {
+        const date = document.getElementById('editDate').value;
+        const time = document.getElementById('editTime').value;
+        const area = document.getElementById('editArea').value;
+
+        db.collection('reservations').doc(docId).update({
+          name: name,
+          phone: phone,
+          partySize: partySize,
+          date: date,
+          time: time,
+          area: area
+        }).then(() => {
+          console.log("Reservation updated successfully");
+          modal.style.display = "none";
+          updateReservations();
+        }).catch((error) => {
+          handleFirestoreError(error);
+        });
+      } else if (type === 'queue') {
+      } else if (type === 'team') {
+      }
+    };
+
+    function updateFeedbacks() {
+      const feedbackList = document.getElementById('feedbackList');
+      feedbackList.innerHTML = '';
+
+      db.collection('feedback')
+        .orderBy('timestamp', 'desc')
+        .limit(10)
+        .get()
+        .then((snapshot) => {
+          if (snapshot.empty) {
+            feedbackList.innerHTML = '<p>Nenhum feedback disponível.</p>';
+          } else {
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              console.log('Feedback data:', data);
+              const feedbackItem = `
+                <div class="feedback-item">
+                  <p><strong>Cliente:</strong> ${data.name || 'Anônimo'}</p>
+                  <p><strong>Avaliação:</strong> ${data.rating || 'N/A'}/5</p>
+                  <p><strong>Comentário:</strong> ${data.text || 'Sem comentário'}</p>
+                  <p><strong>Data:</strong> ${new Date(data.timestamp?.toDate() || Date.now()).toLocaleString()}</p>
+                </div>
+              `;
+              feedbackList.insertAdjacentHTML('beforeend', feedbackItem);
+            });
+          }
+        })
+        .catch((error) => {
+          handleFirestoreError(error);
+          feedbackList.innerHTML = '<p>Erro ao carregar feedbacks. Por favor, tente novamente mais tarde.</p>';
+        });
+    }
+
+    function initializeTeamManagement() {
+      const teamTable = document.querySelector('#teamTable tbody');
+      const addTeamMemberForm = document.getElementById('addTeamMemberForm');
+      const applyTeamFilterBtn = document.getElementById('applyTeamFilter');
+
+      function loadTeamMembers(filter = null, filterValue = null) {
+        let query = db.collection('team');
+        if (filter && filterValue) {
+          query = query.where(filter, '==', filterValue);
+        }
+        query.get().then((snapshot) => {
+          teamTable.innerHTML = '';
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const row = `
+              <tr>
+                <td data-label="Nome">${data.name}</td>
+                <td data-label="Função">${data.role}</td>
+                <td data-label="Turno">${data.shift}</td>
+                <td data-label="Contato">${data.contact}</td>
+                <td data-label="Ações">
+                  <button onclick="editTeamMember('${doc.id}')">Editar</button>
+                  <button class="remove" onclick="removeTeamMember('${doc.id}')">Remover</button>
+                </td>
+              </tr>
+            `;
+            teamTable.insertAdjacentHTML('beforeend', row);
+          });
+        });
+      }
+
+      addTeamMemberForm.onsubmit = (e) => {
+        e.preventDefault();
+        const name = document.getElementById('teamMemberName').value;
+        const role = document.getElementById('teamMemberRole').value;
+        const shift = document.getElementById('teamMemberShift').value;
+        const contact = document.getElementById('teamMemberContact').value;
+
+        db.collection('team').add({
+          name: name,
+          role: role,
+          shift: shift,
+          contact: contact
+        }).then(() => {
+          console.log("Team member added successfully!");
+          addTeamMemberForm.reset();
+          loadTeamMembers();
+        }).catch((error) => {
+          handleFirestoreError(error);
+        });
+      };
+
+      applyTeamFilterBtn.onclick = () => {
+        const filter = document.getElementById('teamFilter').value;
+        const filterValue = document.getElementById('teamFilterValue').value;
+        if (filter === 'all') {
+          loadTeamMembers();
+        } else {
+          loadTeamMembers(filter, filterValue);
+        }
+      };
+
+      loadTeamMembers();
+    }
+
+    function editTeamMember(docId) {
+      db.collection('team').doc(docId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('editId').value = docId;
+          document.getElementById('editType').value = 'team';
+          document.getElementById('editName').value = data.name;
+          document.getElementById('editRole').value = data.role;
+          document.getElementById('editShift').value = data.shift;
+          document.getElementById('editContact').value = data.contact;
+          document.getElementById('editPhone').style.display = 'none';
+          document.getElementById('editPartySize').style.display = 'none';
+          document.getElementById('editDate').style.display = 'none';
+          document.getElementById('editTime').style.display = 'none';
+          document.getElementById('editArea').style.display = 'none';
+          modal.style.display = "block";
+        }
+      });
+    }
+
+    function removeTeamMember(docId) {
+      if (confirm('Tem certeza que deseja remover este membro da equipe?')) {
+        db.collection('team').doc(docId).delete().then(() => {
+          console.log("Team member successfully removed!");
+          initializeTeamManagement();
+        }).catch((error) => {
+          handleFirestoreError(error);
+        });
+      }
+    }
+
+    document.getElementById('addToQueueForm').onsubmit = (e) => {
+      e.preventDefault();
+      if (!isAuthenticated) return;
+
+      db.collection('settings').doc('queueStatus').get().then((doc) => {
+        if (doc.exists && doc.data().active) {
+          const name = document.getElementById('queueName').value;
+          const phone = document.getElementById('queuePhone').value;
+          const partySize = parseInt(document.getElementById('queuePartySize').value);
+
+          db.collection('queue').add({
+            name: name,
+            phone: phone,
+            partySize: partySize,
+            timestamp: Date.now(),
+            position: 999999,
+            status: 'waiting'
+          }).then(() => {
+            console.log("Added to queue successfully!");
+            document.getElementById('addToQueueForm').reset();
+            updateQueuePositions();
+          }).catch((error) => {
+            handleFirestoreError(error);
+          });
+        } else {
+          alert('A fila está desativada no momento. Não é possível adicionar novos clientes.');
+        }
+      });
+    };
+
+    document.getElementById('createReservationForm').onsubmit = (e) => {
+      e.preventDefault();
+      if (!isAuthenticated) return;
+
+      const today = new Date().toISOString().split('T')[0];
+      db.collection('reservations').where('date', '==', today).get().then((snapshot) => {
+        if (snapshot.size >= 5) {
+          alert('Limite de reservas atingido para hoje');
+          return;
+        }
+
+        const name = document.getElementById('reservationName').value;
+        const phone = document.getElementById('reservationPhone').value;
+        const partySize = parseInt(document.getElementById('reservationPartySize').value);
+        const date = document.getElementById('reservationDate').value;
+        const time = document.getElementById('reservationTime').value;
+        const area = document.getElementById('reservationArea').value;
+
+        db.collection('reservations').add({
+          name: name,
+          phone: phone,
+          partySize: partySize,
+          date: date,
+          time: time,
+          area: area
+        }).then(() => {
+          console.log("Reservation created successfully!");
+          document.getElementById('createReservationForm').reset();
+        }).catch((error) => {
+          handleFirestoreError(error);
+        });
+      });
+    };
+
+    document.getElementsByClassName('close')[1].onclick = () => {
+      document.getElementById('settingsModal').style.display = 'none';
+    };
+
+    document.getElementById('settingsForm').onsubmit = (e) => {
+      e.preventDefault();
+      if (!isAuthenticated) return;
+
+      const maxReservations = parseInt(document.getElementById('maxReservations').value);
+      const advanceReservationDays = parseInt(document.getElementById('advanceReservationDays').value);
+
+      db.collection('settings').doc('reservations').set({
+        maxReservations: maxReservations,
+        advanceReservationDays: advanceReservationDays
+      }).then(() => {
+        console.log("Settings updated successfully!");
+        document.getElementById('settingsModal').style.display = 'none';
+      }).catch((error) => {
+        handleFirestoreError(error);
+      });
+    };
+
+    const checkAutoActivateQueue = () => {
+      const now = new Date();
+      const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+
+      db.collection('settings').doc('queueStatus').get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          if (!data.active && data.autoActivateTime === currentTime) {
+            db.collection('settings').doc('queueStatus').update({ 
+              active: true 
+            });
+            queueActive = true;
+            document.getElementById('activateQueueBtn').textContent = 'Desativar Fila';
+            console.log('Queue automatically activated');
+          }
+        }
+      });
+    }
+
+    setInterval(checkAutoActivateQueue, 60000);
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      if (isAuthenticated) {
+        initializeApp();
+      } else {
+        showLoginContainer();
+      }
+    });
+  </script>
+</body>
+</html>
