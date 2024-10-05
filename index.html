@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
+<head>
+<base href="https://bar-esperanca.com/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bar Esperança - Gerenciamento</title>
@@ -455,6 +456,18 @@
         element.style.display = section === sectionId ? 'block' : 'none';
       }
     });
+
+    const mainContent = document.getElementById('mainContent');
+    const otherContent = document.getElementById('otherContent');
+    if (mainContent && otherContent) {
+      if (sectionId === 'main') {
+        mainContent.style.display = 'block';
+        otherContent.style.display = 'none';
+      } else {
+        mainContent.style.display = 'none';
+        otherContent.style.display = 'block';
+      }
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -558,7 +571,6 @@
 
   window.addEventListener('online', () => {
     updateOnlineStatus();
-    // Implement retry logic for failed operations
   });
   window.addEventListener('offline', updateOnlineStatus);
 </script>
@@ -581,8 +593,8 @@
     
     <nav id="mainNav">
       <ul>
-        <li><a href="#main" data-section="main">Principal</a></li>
-        <li><a href="#addToQueue" data-section="addToQueue">Adicionar à Fila</a></li>
+        <li><a href="#" data-section="main">Principal</a></li>
+        <li><a href="#" data-section="addToQueue">Adicionar à Fila</a></li>
         <li><a href="#" data-section="createReservation">Criar Reserva</a></li>
         <li><a href="#" data-section="feedbacks">Feedbacks</a></li>
         <li><a href="#" data-section="teamManagement">Gerenciar Equipe</a></li>
@@ -591,7 +603,7 @@
 
     <main class="container">
       <div id="mainContent">
-        <section id="statistics">
+        <section id="main">
           <h2>Estatísticas</h2>
           <p>Clientes na fila: <span id="queueCount">0</span></p>
           <p>Reservas do dia: <span id="todayReservations">0</span></p>
@@ -798,7 +810,6 @@
 
     window.addEventListener('online', () => {
       updateOnlineStatus();
-      // Implement retry logic for failed operations
     });
     window.addEventListener('offline', updateOnlineStatus);
 
