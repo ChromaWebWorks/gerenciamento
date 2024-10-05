@@ -447,6 +447,29 @@
     }
   }
 
+  function showSection(sectionId) {
+    const sections = ['main', 'addToQueue', 'createReservation', 'feedbacks', 'teamManagement'];
+    sections.forEach(section => {
+      const element = document.getElementById(section);
+      if (element) {
+        element.style.display = section === sectionId ? 'block' : 'none';
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const mainNav = document.getElementById('mainNav');
+    if (mainNav) {
+      mainNav.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (e.target.tagName === 'A') {
+          const section = e.target.getAttribute('data-section');
+          showSection(section);
+        }
+      });
+    }
+  });
+
   function initializeApp() {
     db.collection('settings').doc('queueStatus').get().then((doc) => {
       if (doc.exists) {
@@ -479,12 +502,7 @@
     updateFeedbacks();
     initializeTeamManagement();
     showLogoutButton();
-    const mainContent = document.getElementById('mainContent');
-    const otherContent = document.getElementById('otherContent');
-    if (mainContent) mainContent.style.display = 'block';
-    if (otherContent) otherContent.style.display = 'none';
-    document.getElementById('activateQueueBtn').addEventListener('click', toggleQueue);
-    document.getElementById('setAutoActivateTime').addEventListener('click', setAutoActivateTime);
+    showSection('main');
   }
 
   function toggleQueue() {
@@ -544,13 +562,13 @@
   });
   window.addEventListener('offline', updateOnlineStatus);
 </script>
-</head>
+<script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-YBVNRCFNNZ" async=""></script></head>
 <body>
-  <div id="loginContainer" style="display: none;">
+  <div id="loginContainer" style="display: block;">
     <h2>Login</h2>
     <form id="loginForm">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="username" placeholder="Username" required="">
+      <input type="password" id="password" placeholder="Password" required="">
       <button type="submit">Login</button>
     </form>
   </div>
@@ -565,9 +583,9 @@
       <ul>
         <li><a href="#main" data-section="main">Principal</a></li>
         <li><a href="#addToQueue" data-section="addToQueue">Adicionar à Fila</a></li>
-        <li><a href="#createReservation" data-section="createReservation">Criar Reserva</a></li>
-        <li><a href="#feedbacks" data-section="feedbacks">Feedbacks</a></li>
-        <li><a href="#teamManagement" data-section="teamManagement">Gerenciar Equipe</a></li>
+        <li><a href="#" data-section="createReservation">Criar Reserva</a></li>
+        <li><a href="#" data-section="feedbacks">Feedbacks</a></li>
+        <li><a href="#" data-section="teamManagement">Gerenciar Equipe</a></li>
       </ul>
     </nav>
 
@@ -630,9 +648,9 @@
         <section id="addToQueue">
           <h2>Adicionar à Fila</h2>
           <form id="addToQueueForm">
-            <input type="text" id="queueName" placeholder="Nome" required>
-            <input type="tel" id="queuePhone" placeholder="Telefone" required>
-            <input type="number" id="queuePartySize" placeholder="Tamanho do Grupo" required>
+            <input type="text" id="queueName" placeholder="Nome" required="">
+            <input type="tel" id="queuePhone" placeholder="Telefone" required="">
+            <input type="number" id="queuePartySize" placeholder="Tamanho do Grupo" required="">
             <button type="submit">Adicionar à Fila</button>
           </form>
         </section>
@@ -640,12 +658,12 @@
         <section id="createReservation">
           <h2>Criar Reserva</h2>
           <form id="createReservationForm">
-            <input type="text" id="reservationName" placeholder="Nome" required>
-            <input type="tel" id="reservationPhone" placeholder="Telefone" required>
-            <input type="number" id="reservationPartySize" placeholder="Tamanho do Grupo" required>
-            <input type="date" id="reservationDate" required>
-            <input type="time" id="reservationTime" required>
-            <select id="reservationArea" required>
+            <input type="text" id="reservationName" placeholder="Nome" required="">
+            <input type="tel" id="reservationPhone" placeholder="Telefone" required="">
+            <input type="number" id="reservationPartySize" placeholder="Tamanho do Grupo" required="">
+            <input type="date" id="reservationDate" required="">
+            <input type="time" id="reservationTime" required="">
+            <select id="reservationArea" required="">
               <option value="terreo">Térreo</option>
               <option value="primeiro_andar">Primeiro Andar</option>
             </select>
@@ -661,15 +679,15 @@
         <section id="teamManagement">
           <h2>Gerenciar Equipe</h2>
           <form id="addTeamMemberForm">
-            <input type="text" id="teamMemberName" placeholder="Nome" required>
-            <input type="text" id="teamMemberRole" placeholder="Função" required>
-            <select id="teamMemberShift" required>
+            <input type="text" id="teamMemberName" placeholder="Nome" required="">
+            <input type="text" id="teamMemberRole" placeholder="Função" required="">
+            <select id="teamMemberShift" required="">
               <option value="">Selecione o turno</option>
               <option value="manha">Manhã</option>
               <option value="tarde">Tarde</option>
               <option value="noite">Noite</option>
             </select>
-            <input type="tel" id="teamMemberContact" placeholder="Contato" required>
+            <input type="tel" id="teamMemberContact" placeholder="Contato" required="">
             <button type="submit">Adicionar Membro</button>
           </form>
           <div>
@@ -701,12 +719,12 @@
 
   <div id="editModal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close">×</span>
       <h2>Editar Informações</h2>
       <form id="editForm">
         <input type="hidden" id="editId">
         <input type="hidden" id="editType">
-        <input type="text" id="editName" placeholder="Nome" required>
+        <input type="text" id="editName" placeholder="Nome" required="">
         <input type="tel" id="editPhone" placeholder="Telefone">
         <input type="number" id="editPartySize" placeholder="Tamanho do Grupo">
         <input type="date" id="editDate">
@@ -729,13 +747,13 @@
 
   <div id="settingsModal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close">×</span>
       <h2>Configurações</h2>
       <form id="settingsForm">
         <label for="maxReservations">Número máximo de reservas por dia:</label>
-        <input type="number" id="maxReservations" required>
+        <input type="number" id="maxReservations" required="">
         <label for="advanceReservationDays">Dias de antecedência para reservas:</label>
-        <input type="number" id="advanceReservationDays" required>
+        <input type="number" id="advanceReservationDays" required="">
         <button type="submit">Salvar</button>
       </form>
     </div>
@@ -892,11 +910,7 @@
       updateFeedbacks();
       initializeTeamManagement();
       showLogoutButton();
-
-      const mainContent = document.getElementById('mainContent');
-      const otherContent = document.getElementById('otherContent');
-      if (mainContent) mainContent.style.display = 'block';
-      if (otherContent) otherContent.style.display = 'none';
+      showSection('main');
 
       document.getElementById('activateQueueBtn').addEventListener('click', toggleQueue);
       document.getElementById('setAutoActivateTime').addEventListener('click', setAutoActivateTime);
@@ -1395,5 +1409,5 @@
       }
     });
   </script>
-</body>
-</html>
+
+</body></html>
